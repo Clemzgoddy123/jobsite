@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Login · Jobsite{% endblock %}
+
+{% block content %}
+  <div class="card" style="max-width: 400px; margin: 0 auto;">
+    <h2>Login to your account</h2>
+    {% if form.non_field_errors %}
+      <div style="background: #fee; border: 1px solid #fcc; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; color: #c33;">
+        {% for error in form.non_field_errors %}
+          <p style="margin: 0.5rem 0;">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <form method="post" style="margin-top: 1.5rem;">
+      {% csrf_token %}
+      <label style="display: block; margin-bottom: 1rem;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem;">Username</div>
+        <input type="text" name="username" required style="width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15);">
+        {% if form.username.errors %}
+          <div style="color: #c33; font-size: 0.9rem; margin-top: 0.25rem;">
+            {% for error in form.username.errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
+      </label>
+      <label style="display: block; margin-bottom: 1.5rem;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem;">Password</div>
+        <input type="password" name="password" required style="width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15);">
+        {% if form.password.errors %}
+          <div style="color: #c33; font-size: 0.9rem; margin-top: 0.25rem;">
+            {% for error in form.password.errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
+      </label>
+      <button type="submit" style="width: 100%; padding: 0.8rem; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: 600; cursor: pointer;">Login</button>
+    </form>
+    <p style="margin-top: 1rem; text-align: center; color: var(--muted);">
+      Don't have an account? <a href="{% url 'jobs:register' %}" style="color: var(--primary);">Register here</a>
+      <p style="margin-top: 1rem; text-align: center; color: var(--muted);">
+      <a href="{% url 'jobs:landing' %}" style="color: var(--primary);">Back to Home</a>
+    </p>
+    </p>
+  </div>
+{% endblock %}

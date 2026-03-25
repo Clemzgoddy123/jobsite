@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jobsite - Find Your Dream Job</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1b4b7a;
+      --primary-light: #2f6c99;
+      --secondary: #00a86b;
+      --accent: #ff6b6b;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1b1b1f;
+      --muted: #6b7a89;
+      --shadow: rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(135deg, #2f6c99, #1b4b7a);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px var(--shadow);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-auth {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-auth a {
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-auth .login-btn {
+      color: white;
+      border: 2px solid white;
+    }
+
+    .nav-auth .login-btn:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .nav-auth .register-btn {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .nav-auth .register-btn:hover {
+      background: #00854d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 168, 107, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-top: 60px;
+      min-height: calc(100vh - 60px);
+      background: linear-gradient(135deg, #1b4b7a 0%, #2f6c99 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(0, 168, 107, 0.1);
+      border-radius: 50%;
+      bottom: -50px;
+      left: -50px;
+      animation: float 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(30px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      padding: 2rem;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: fadeInScale 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      animation: fadeIn 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeIn 0.8s ease-out 0.6s both;
+    }
+
+    .btn {
+      padding: 0.9rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #00854d;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 168, 107, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Sections */
+    .section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      border-radius: 2px;
+    }
+
+    /* Home Section */
+    #home {
+      background: linear-gradient(135deg, #f4f7fb 0%, #e8f0f8 100%);
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .home-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px var(--shadow);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .home-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .home-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .home-card h3 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Browse Jobs Section */
+    #browse-jobs {
+      background: white;
+    }
+
+    .job-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-box {
+      background: linear-gradient(135deg, #f4f7fb 0%, #e8f0f8 100%);
+      padding: 2rem;
+      border-radius: 12px;
+      border-left: 4px solid var(--secondary);
+    }
+
+    .feature-box h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Companies Section */
+    #companies {
+      background: linear-gradient(135deg, #f4f7fb 0%, #e8f0f8 100%);
+    }
+
+    .company-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .company-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .company-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px var(--shadow);
+    }
+
+    .company-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    /* About Section */
+    #about {
+      background: white;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-text h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .about-text ul {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .about-text li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .about-text li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    .about-image {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 16px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+
+    /* Services Section */
+    #services {
+      background: linear-gradient(135deg, #f4f7fb 0%, #e8f0f8 100%);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px var(--shadow);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--secondary);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .service-number {
+      font-size: 2.5rem;
+      color: var(--secondary);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Career Resources Section */
+    #career-resources {
+      background: white;
+    }
+
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .resource-card {
+      background: linear-gradient(135deg, #f4f7fb 0%, #e8f0f8 100%);
+      padding: 2rem;
+      border-radius: 12px;
+      border-left: 4px solid var(--secondary);
+    }
+
+    .resource-card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Contact Section */
+    #contact {
+      background: linear-gradient(135deg, #1b4b7a 0%, #2f6c99 100%);
+      color: white;
+    }
+
+    #contact .section-title {
+      color: white;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      max-width: 600px;
+      margin: 0 auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #00854d;
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .hamburger {
+        display: block;
+        order: 2;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(135deg, #2f6c99, #1b4b7a);
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        box-shadow: 0 4px 10px var(--shadow);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        order: 3;
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .nav-links li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-links li:last-child {
+        border-bottom: none;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 1rem 2rem;
+        border-radius: 0;
+      }
+
+      .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: none;
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .nav-auth {
+        display: flex;
+        gap: 0.5rem;
+        order: 1;
+        margin-left: auto;
+      }
+
+      .nav-auth a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+
+      .about-image {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-brand">Jobsite</a>
+    <button class="hamburger" aria-label="Toggle menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#browse-jobs">Browse Jobs</a></li>
+      <li><a href="#companies">Companies</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#career-resources">Career Resource</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-auth">
+      <a href="{% url 'login' %}" class="login-btn">Login</a>
+      <a href="{% url 'jobs:register' %}" class="register-btn">Register</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Find Your Dream Job Today</h1>
+      <p>Connect with top companies and start your career journey with us</p>
+      <div class="hero-buttons">
+        <a href="{% url 'jobs:job_list' %}" class="btn btn-primary">Browse Jobs</a>
+        <a href="#about" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Home Section -->
+  <section id="home" class="section">
+    <h2 class="section-title">Welcome to Jobsite</h2>
+    <div class="home-grid">
+      <div class="home-card">
+        <div class="home-card-icon">💼</div>
+        <h3>Thousands of Jobs</h3>
+        <p>Access thousands of job listings from top companies worldwide.</p>
+      </div>
+      <div class="home-card">
+        <div class="home-card-icon">👥</div>
+        <h3>Career Growth</h3>
+        <p>Develop your career with opportunities for growth and advancement.</p>
+      </div>
+      <div class="home-card">
+        <div class="home-card-icon">🌍</div>
+        <h3>Global Reach</h3>
+        <p>Find opportunities across different industries and locations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse Jobs Section -->
+  <section id="browse-jobs" class="section">
+    <h2 class="section-title">Browse Jobs</h2>
+    <div class="job-features">
+      <div class="feature-box">
+        <h3>🔍 Advanced Search</h3>
+        <p>Use our advanced search filters to find the perfect job that matches your skills and preferences.</p>
+      </div>
+      <div class="feature-box">
+        <h3>💾 Save Favorites</h3>
+        <p>Bookmark your favorite jobs and apply whenever you're ready.</p>
+      </div>
+      <div class="feature-box">
+        <h3>📱 Mobile Friendly</h3>
+        <p>Search and apply for jobs on-the-go with our mobile app.</p>
+      </div>
+      <div class="feature-box">
+        <h3>⏰ Latest Updates</h3>
+        <p>Get instant notifications for new job postings matching your profile.</p>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="{% url 'jobs:job_list' %}" class="btn btn-primary">View All Jobs</a>
+    </div>
+  </section>
+
+  <!-- Companies Section -->
+  <section id="companies" class="section">
+    <h2 class="section-title">Featured Companies</h2>
+    <div class="company-grid">
+      <div class="company-card">
+        <div class="company-logo">TW</div>
+        <h3>TechWorks</h3>
+        <p style="color: var(--muted); font-size: 0.9rem;">Leading tech innovations</p>
+      </div>
+      <div class="company-card">
+        <div class="company-logo">GC</div>
+        <h3>GlobalCorp</h3>
+        <p style="color: var(--muted); font-size: 0.9rem;">Fortune 500 Company</p>
+      </div>
+      <div class="company-card">
+        <div class="company-logo">IS</div>
+        <h3>InnovateSoft</h3>
+        <p style="color: var(--muted); font-size: 0.9rem;">Software Solutions</p>
+      </div>
+      <div class="company-card">
+        <div class="company-logo">DS</div>
+        <h3>DigitalSystems</h3>
+        <p style="color: var(--muted); font-size: 0.9rem;">Cloud Services</p>
+      </div>
+      <div class="company-card">
+        <div class="company-logo">VS</div>
+        <h3>VisionSync</h3>
+        <p style="color: var(--muted); font-size: 0.9rem;">AI & Machine Learning</p>
+      </div>
+      <div class="company-card">
+        <div class="company-logo">FM</div>
+        <h3>FutureMark</h3>
+        <p style="color: var(--muted); font-size: 0.9rem;">Digital Marketing</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <h2 class="section-title">About Jobsite</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <h3>Your Gateway to Success</h3>
+        <p>Jobsite is a leading job search platform dedicated to connecting talented professionals with their ideal career opportunities. With over 10 years of experience in the recruitment industry, we've successfully helped thousands of job seekers find their dream jobs.</p>
+        <h4 style="color: var(--primary); margin-top: 1.5rem;">Why Choose Us?</h4>
+        <ul>
+          <li>Verified job listings from trusted companies</li>
+          <li>User-friendly interface and advanced search</li>
+          <li>Career resources and guidance</li>
+          <li>Free membership with premium features</li>
+          <li>24/7 Customer support</li>
+          <li>Secure and confidential profile</li>
+        </ul>
+      </div>
+      <div class="about-image">📈</div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="section">
+    <h2 class="section-title">Our Services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-number">01</div>
+        <h3>Job Search</h3>
+        <p>Access thousands of job opportunities across various industries and locations. Filter by salary, experience level, and job type.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">02</div>
+        <h3>Resume Building</h3>
+        <p>Create a professional resume with our easy-to-use templates. Highlight your skills and experience to attract employers.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">03</div>
+        <h3>Interview Prep</h3>
+        <p>Prepare for interviews with our comprehensive guides, tips, and practice questions from industry experts.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">04</div>
+        <h3>Skill Development</h3>
+        <p>Enhance your skills with access to online courses, webinars, and training materials in various fields.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">05</div>
+        <h3>Career Coaching</h3>
+        <p>Get personalized career advice from experienced professionals to guide your job search and career advancement.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">06</div>
+        <h3>Job Alerts</h3>
+        <p>Receive personalized job notifications based on your profile, preferences, and career goals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Career Resources Section -->
+  <section id="career-resources" class="section">
+    <h2 class="section-title">Career Resources</h2>
+    <div class="resources-grid">
+      <div class="resource-card">
+        <h3>📚 Resume Tips</h3>
+        <p>Learn how to write an effective resume that stands out to recruiters. Get templates and examples from successful professionals.</p>
+      </div>
+      <div class="resource-card">
+        <h3>🎯 Career Guidance</h3>
+        <p>Explore career paths, industry trends, and salary insights. Make informed decisions about your career direction.</p>
+      </div>
+      <div class="resource-card">
+        <h3>💬 Interview Questions</h3>
+        <p>Practice with common interview questions and learn best practices for answering them confidently.</p>
+      </div>
+      <div class="resource-card">
+        <h3>🔗 Networking Tips</h3>
+        <p>Build professional connections through networking events, LinkedIn optimization, and industry meetups.</p>
+      </div>
+      <div class="resource-card">
+        <h3>🎓 Skill Building</h3>
+        <p>Access free and premium courses to develop new skills and stay competitive in your industry.</p>
+      </div>
+      <div class="resource-card">
+        <h3>💼 Workplace Tips</h3>
+        <p>Get advice on workplace etiquette, professional development, and career advancement strategies.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">📧</div>
+        <h3>Email</h3>
+        <p><a href="mailto:contact@jobsite.com" style="color: white; text-decoration: none;">contact@jobsite.com</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <h3>Phone</h3>
+        <p><a href="tel:+1234567890" style="color: white; text-decoration: none;">+1 (234) 567-890</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <h3>Address</h3>
+        <p>123 Job Street, Lagos, Nigeria</p>
+      </div>
+    </div>
+    <form class="contact-form" method="POST" action="#contact">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Jobsite. All rights reserved. | <a href="#" style="color: var(--secondary);">Privacy Policy</a> | <a href="#" style="color: var(--secondary);">Terms of Service</a></p>
+  </footer>
+
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Hamburger menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Close menu when clicking on a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>

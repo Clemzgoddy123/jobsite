@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Register · Jobsite{% endblock %}
+
+{% block content %}
+  <div class="card" style="max-width: 500px; margin: 0 auto;">
+    <h2>Create your account</h2>
+    <p style="color: var(--muted);">Register to apply for jobs and manage your applications.</p>
+    <form method="post" style="margin-top: 1.5rem;">
+      {% csrf_token %}
+      <label style="display: block; margin-bottom: 1rem;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem;">Username</div>
+        <input type="text" name="username" required style="width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15);">
+      </label>
+      <label style="display: block; margin-bottom: 1rem;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem;">Email</div>
+        <input type="email" name="email" required style="width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15);">
+      </label>
+      <label style="display: block; margin-bottom: 1rem;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem;">Password</div>
+        <input type="password" name="password1" required style="width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15);">
+      </label>
+      <label style="display: block; margin-bottom: 1.5rem;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem;">Confirm Password</div>
+        <input type="password" name="password2" required style="width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15);">
+      </label>
+      <button type="submit" style="width: 100%; padding: 0.8rem; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: 600; cursor: pointer;">Register</button>
+    </form>
+    <p style="margin-top: 1rem; text-align: center; color: var(--muted);">
+      Already have an account? <a href="{% url 'login' %}" style="color: var(--primary);">Login here</a>
+    </p>
+    <p style="margin-top: 1rem; text-align: center; color: var(--muted);">
+      <a href="{% url 'jobs:landing' %}" style="color: var(--primary);">Back to Home</a>
+    </p>
+  </div>
+{% endblock %}
